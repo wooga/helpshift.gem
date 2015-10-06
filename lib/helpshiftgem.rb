@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'base64'
 require_relative 'configuration'
 require_relative 'helpshift'
 require_relative 'issue'

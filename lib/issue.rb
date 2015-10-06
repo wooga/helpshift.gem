@@ -6,18 +6,15 @@ module HelpshiftGem
       if !is_valid?
         raise 'Invalid issue. Are you missing field declarations for email, title or message_body?'
       else
-        request_uri = "https://api.#{HelpshiftGem.configuration.base_domain}/v1/#{HelpshiftGem.configuration.customer_domain}/apps/#{app_id}"
-        response = RestClient::Request.execute method: :get, url: request_uri, user: HelpshiftGem.configuration.api_key, payload: {
-          "user"          => HelpshiftGem.configuration.api_key,
+        request_uri = "https://api.#{HelpshiftGem.configuration.base_domain}/v1/#{HelpshiftGem.configuration.customer_domain}/issues"
+        params = {
           "email"         => email,
           "title"         => title,
           "message-body"  => message_body,
-          "platform-type" => platform_type,
-          "app-id"        => app_id,
-          "tags"          => tags,
-          "meta"          => meta
+          "app-id"        => app_id
         }
-        JSON.parse response.to_str
+
+        response =  RestClient.post request_uri, params, {:Authorization => "Basic #{Base64.encode64(HelpshiftGem.configuration.api_key)}"}
       end
     end
 
