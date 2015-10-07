@@ -16,11 +16,11 @@ config.api_key = "___your_api_key___"
 ```
 ## Get all Applications
 ```
-App.all
+Helpshift::App.all
 ```
 ## Get a specific Applications
 ```
-App.find(___your_app_publish_id___)
+Helpshift::App.find(___your_app_publish_id___)
 ```
 ## Create a new issue
 ```
