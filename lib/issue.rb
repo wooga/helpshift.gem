@@ -4,7 +4,7 @@ module HelpshiftGem
 
     def create
       if !is_valid?
-        raise 'Invalid issue. Are you missing field declarations for email, title or message_body?'
+        raise 'Invalid issue. Are you missing field declarations for "email", "title" or "message_body"? Is "tags" an Array? Is "meta" a Hash?'
       else
         request_uri = "https://api.#{HelpshiftGem.configuration.base_domain}/v1/#{HelpshiftGem.configuration.customer_domain}/issues"
         params = {
@@ -22,6 +22,8 @@ module HelpshiftGem
     end
 
     def is_valid?
+      (@tags.nil? || @tags.is_a?(Array)) &&
+      (@meta.nil? || @meta.is_a?(Hash)) &&
       !@email.nil? && !@title.nil? && !@message_body.nil? && !@app_id.nil?
     end
 
