@@ -19,9 +19,9 @@ Jeweler::RubygemsDotOrgTasks.new
 
 desc "Start a pry shell and load all gems"
 task :shell do
- require 'pry'
- $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
- require_relative "lib/helpshift"
- Pry.editor = "emacs"
- Pry.start
+  require 'pry'
+  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+  require_relative "lib/helpshift"
+  Pry.editor = "emacs"
+  Pry.start
 end
