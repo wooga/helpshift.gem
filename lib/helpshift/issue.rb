@@ -13,9 +13,8 @@ module Helpshift
           "message-body"  => message_body,
           "app-id"        => app_id,
           "platform-type" => platform_type,
-          # These to keys cause the API to return "400 Bad Request", so we leave them out for now:
-          # "tags"          => tags,
-          # "meta"          => meta
+          "tags"          => "['#{tags.join("','")}']",
+          "meta"          => meta.to_json
         }
         params.each {|key,value| params.delete(key) if value.nil? }
 
