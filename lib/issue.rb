@@ -11,10 +11,13 @@ module HelpshiftGem
           "email"         => email,
           "title"         => title,
           "message-body"  => message_body,
-          "app-id"        => app_id
-        }
+          "app-id"        => app_id,
+          "platform-type" => platform_type,
+          "tags"          => tags,
+          "meta"          => meta
+        }.reject!{|key,value| value.nil?}
 
-        response =  RestClient.post request_uri, params, {:Authorization => "Basic #{Base64.encode64(HelpshiftGem.configuration.api_key)}"}
+        RestClient.post request_uri, params, {:Authorization => "Basic #{Base64.encode64(HelpshiftGem.configuration.api_key)}"}
       end
     end
 
