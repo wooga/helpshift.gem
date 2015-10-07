@@ -13,7 +13,7 @@ module Helpshift
           "message-body"  => message_body,
           "app-id"        => app_id,
           "platform-type" => platform_type,
-          "tags"          => "['#{tags.join("','")}']",
+          "tags"          => "[\"#{tags.join("\",\"")}\"]",
           "meta"          => meta.to_json
         }
         params.each {|key,value| params.delete(key) if value.nil? }
