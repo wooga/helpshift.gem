@@ -1,17 +1,18 @@
 require 'json'
 require 'rest-client'
 require 'base64'
-require_relative 'configuration'
-require_relative 'helpshift'
-require_relative 'issue'
-require_relative 'app'
+require 'helpshift/app'
+require 'helpshift/configuration'
+require 'helpshift/issue'
 
 module Helpshift
-  def self.configuration
+  extend self
+
+  def configuration
     @configuration ||= Configuration.new
   end
 
-  def self.configure
+  def configure
     config = configuration
     block_given? ? yield(config) : config
     config

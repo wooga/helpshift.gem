@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'bundler'
 require 'rake'
-require_relative "lib/helpshift"
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
@@ -22,6 +21,7 @@ desc "Start a pry shell and load all gems"
 task :shell do
  require 'pry'
  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+ require_relative "lib/helpshift"
  Pry.editor = "emacs"
  Pry.start
 end
