@@ -1,4 +1,4 @@
-module HelpshiftGem
+module Helpshift
   class Issue
     attr_accessor :email, :title, :message_body, :app_id, :platform_type, :tags, :meta
 
@@ -6,7 +6,7 @@ module HelpshiftGem
       if !is_valid?
         raise 'Invalid issue. Are you missing field declarations for "email", "title" or "message_body"? Is "tags" an Array? Is "meta" a Hash?'
       else
-        request_uri = "https://api.#{HelpshiftGem.configuration.base_domain}/v1/#{HelpshiftGem.configuration.customer_domain}/issues"
+        request_uri = "https://api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/issues"
         params = {
           "email"         => email,
           "title"         => title,
@@ -19,7 +19,7 @@ module HelpshiftGem
         }
         params.each {|key,value| params.delete(key) if value.nil? }
 
-        RestClient.post request_uri, params, {:Authorization => "Basic #{Base64.encode64(HelpshiftGem.configuration.api_key)}"}
+        RestClient.post request_uri, params, {:Authorization => "Basic #{Base64.encode64(Helpshift.configuration.api_key)}"}
       end
     end
 
@@ -29,6 +29,5 @@ module HelpshiftGem
       (@meta.nil? || @meta.is_a?(Hash)) &&
       !@email.nil? && !@title.nil? && !@message_body.nil? && !@app_id.nil?
     end
-
   end
 end

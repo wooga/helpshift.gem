@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
     "lib/app.rb",
     "lib/configuration.rb",
     "lib/helpshift.rb",
-    "lib/helpshiftgem.rb",
+    "lib/helpshift.rb",
     "lib/issue.rb"
   ]
   s.homepage = "http://github.com/wooga/helpshift.gem"
@@ -57,4 +57,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, [">= 0"])
   end
 end
-

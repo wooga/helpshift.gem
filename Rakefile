@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'bundler'
 require 'rake'
-require_relative "lib/helpshiftgem"
+require_relative "lib/helpshift"
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|

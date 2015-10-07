@@ -1,6 +1,6 @@
 require 'rest-client'
 
-module HelpshiftGem
+module Helpshift
   class Configuration
     attr_accessor :api_key, :base_domain, :customer_domain
 
