@@ -22,11 +22,12 @@ module Helpshift
         }
         params.each {|key,value| params.delete(key) if value.nil? }
 
-        auth = "Basic #{Base64.encode64(Helpshift.configuration.api_key)}"
-        RestClient.
-          post(request_uri,
-               params,
-               {:Authorization => auth, :ssl_version => :SSLv23})
+        RestClient::Request.
+          execute(method: :post,
+                  url: request_uri,
+                  payload: params,
+                  user: Helpshift.configuration.api_key,
+                  ssl_version: :SSLv23)
       end
     end
 
