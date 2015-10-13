@@ -3,9 +3,10 @@ require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
 class AppTest < Minitest::Test
   context "app" do
     def setup
-      config = Helpshift.configuration
-      config.customer_domain ="foobar"
-      config.api_key = "foobaz"
+      Helpshift.configure do |config|
+        config.customer_domain = "foobar"
+        config.api_key = "foobaz"
+      end
     end
 
     should 'fetch list of all apps' do

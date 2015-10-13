@@ -5,8 +5,7 @@ module Helpshift
     attr_accessor :api_key, :base_domain, :customer_domain
 
     def initialize
-      @base_domain     = 'helpshift.com'
-      @customer_domain = 'test'
+      @base_domain = 'helpshift.com'
     end
   end
 end
