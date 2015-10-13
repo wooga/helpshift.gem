@@ -1,4 +1,5 @@
 require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
+require 'cgi'
 
 class Issue < Minitest::Test
   def setup
@@ -28,7 +29,6 @@ class Issue < Minitest::Test
 
       last_request = FakeWeb.last_request
 
-      require 'cgi'
       expected_body = CGI::parse("email=testuser%40test.com&title=test%20issue%20title&" +
                    "message-body=test%20issue%20message%20body&app-id=test_app_123456-987654&"+
                    "platform-type=android&tags=%5B%22test_tag1%22%2C%22test_tag2%22%5D&"+
