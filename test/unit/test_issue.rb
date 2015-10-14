@@ -36,7 +36,7 @@ class Issue < Minitest::Test
       actual_body = CGI::parse(last_request.body)
 
       expected_body.each do |key, value|
-        assert_equal value, actual_body[key]
+        assert_equal expected_body[key], actual_body[key]
       end
 
       assert_equal "POST", last_request.method
