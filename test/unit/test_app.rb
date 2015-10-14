@@ -7,6 +7,7 @@ class AppTest < Minitest::Test
       config.customer_domain = "foobar"
       config.base_domain = "helpshift.com"
     end
+    FakeWeb.allow_net_connect = false
   end
 
   context "app" do
@@ -18,7 +19,6 @@ class AppTest < Minitest::Test
                        "publish_id" => 42,
                        "title" => "Blabla Game 2"}]
 
-      FakeWeb.allow_net_connect = false
       FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/apps/",
                            :body => fake_response.to_json )
 
@@ -43,7 +43,6 @@ class AppTest < Minitest::Test
                                :id => "moew_app_123456789-987654321",
                                :publish_id => app_publish_id }
 
-      FakeWeb.allow_net_connect = false
       FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/apps/#{app_publish_id}",
                            :body => fake_response_object.to_json )
 

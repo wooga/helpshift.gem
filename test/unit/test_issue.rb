@@ -9,11 +9,11 @@ class Issue < Minitest::Test
       config.customer_domain = "foobar"
       config.base_domain = 'helpshift.com'
     end
+    FakeWeb.allow_net_connect = false
   end
 
   context "issue" do
     should "create new issue" do
-      FakeWeb.allow_net_connect = false
       FakeWeb.register_uri(:post, %r|https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/|,
                              :body => "empty")
 
