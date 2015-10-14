@@ -1,5 +1,7 @@
 # Helpshift.Gem
 
+[![Build Status](https://travis-ci.org/wooga/helpshift.gem.svg?branch=master)](https://travis-ci.org/wooga/helpshift.gem)
+
 Gem for communicating with the api.helpshift.com API.
 
 # Usage

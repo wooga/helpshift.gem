@@ -1,36 +1,58 @@
-require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
+require_relative '../test_helper.rb'
+require 'cgi'
+require 'json'
 
 class Issue < Minitest::Test
-  context "issue" do
-    def setup
-      config = Helpshift.configuration
-      config.customer_domain ="foobar"
-      config.api_key = "foobaz"
+  CGI_PARAM_TO_ATTR_NAME = { "message-body" => "message_body",
+                             "app-id" => "app_id",
+                             "platform-type" => "platform_type"}
+
+  def setup
+    Helpshift.configure do |config|
+      config.api_key         = "foobaz"
+      config.customer_domain = "foobar"
+      config.base_domain     = 'helpshift.com'
     end
+    FakeWeb.allow_net_connect = false
+  end
 
+  context "issue" do
     should "create new issue" do
-      FakeWeb.register_uri(:post, %r|https://api.#{Helpshift.configuration.base_domain}/|,
-                           :body => "empty")
+      FakeWeb.register_uri(:post, "https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/issues",
+                           :body => "")
 
-      issue = Helpshift::Issue.new
-      issue.email = "testuser@test.com"
-      issue.title = "test issue title"
-      issue.message_body = "test issue message body"
-      issue.app_id="test_app_123456-987654"
+      issue               = Helpshift::Issue.new
+      issue.email         = "testuser@test.com"
+      issue.title         = "test issue title"
+      issue.message_body  = "test issue message body"
+      issue.app_id        = "test_app_123456-987654"
       issue.platform_type = "android"
-      issue.tags = ["test_tag1", "test_tag2"]
-      issue.meta = { "meta-data" => "bla" }
+      issue.tags          = ["test_tag1", "test_tag2"]
+      issue.meta          = {"meta-data" => "bla"}
 
       issue.create
 
       last_request = FakeWeb.last_request
 
-      assert_equal "email=testuser%40test.com&title=test%20issue%20title&" +
-                   "message-body=test%20issue%20message%20body&app-id=test_app_123456-987654&"+
-                   "platform-type=android&tags=%5B%22test_tag1%22%2C%22test_tag2%22%5D&"+
-                   "meta=%7B%22meta-data%22%3A%22bla%22%7D", last_request.body
+      # Parse request_body to Hash and unwrap the contained values
+      request_data = Hash[CGI.parse(last_request.body).map {|k,v| [k,v.first]}]
+
+      request_data.each do |key, request_value|
+        issue_attr_value = issue.send(CGI_PARAM_TO_ATTR_NAME[key] || key)
+        if issue_attr_value.is_a?(Array)
+          assert((issue_attr_value - JSON.parse(request_value)).empty?, "Failed for #{key}")
+        elsif issue_attr_value.is_a?(Hash)
+          request_value = JSON.parse(request_value)
+          request_value.each do |field_key, field_value|
+            assert_equal field_value, issue_attr_value[field_key], "Failed for #{key}"
+          end
+        else
+          assert_equal request_value, issue_attr_value, "Failed for #{key}"
+        end
+      end
+
       assert_equal "POST", last_request.method
-      assert_equal "/v1/test/issues", last_request.path
+      assert_equal "/v1/#{Helpshift.configuration.customer_domain}/issues", last_request.path
     end
   end
 end
