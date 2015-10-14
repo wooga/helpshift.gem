@@ -39,10 +39,10 @@ class Issue < Minitest::Test
                               "platform-type" => "platform_type"}
         issue_value = issue.send(cgi_param_to_attr[key] || key)
         request_value = value
-        if(issue_value.kind_of?(Array))
+        if(issue_value.is_a?(Array))
           request_value = JSON.parse(request_value)
-          assert (issue_value - request_value).empty?, "Failed for #{key}"
-        elsif(issue_value.kind_of?(Hash))
+          assert((issue_value - request_value).empty?, "Failed for #{key}")
+        elsif(issue_value.is_a?(Hash))
           request_value = JSON.parse(request_value)
           request_value.each do |field_key, field_value|
             assert_equal field_value, issue_value[field_key], "Failed for #{key}"
