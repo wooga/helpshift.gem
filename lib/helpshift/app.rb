@@ -33,11 +33,11 @@ module Helpshift
 
     def initialize(json_object)
       @platform_ids = json_object["platform_ids"]
-      @updated_at   = json_object["updated_at"].to_i
-      @created_at   = json_object["created_at"].to_i
+      @updated_at   = json_object["updated_at"]
+      @created_at   = json_object["created_at"]
       @title        = json_object["title"]
       @id           = json_object["id"]
-      @publish_id   = json_object["publish_id"].to_i
+      @publish_id   = json_object["publish_id"]
     end
   end
 end

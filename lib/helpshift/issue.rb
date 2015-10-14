@@ -20,7 +20,7 @@ module Helpshift
           "tags"          => "[\"#{tags.join("\",\"")}\"]",
           "meta"          => meta.to_json
         }
-        params.each {|key,value| params.delete(key) if value.nil? }
+        params.each {|k,v| params.delete(k) if v.nil? }
 
         RestClient::Request.
           execute(method: :post,

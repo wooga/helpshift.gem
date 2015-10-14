@@ -1,5 +1,6 @@
 require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
 require 'cgi'
+require 'json'
 
 class Issue < Minitest::Test
   def setup
@@ -16,27 +17,37 @@ class Issue < Minitest::Test
       FakeWeb.register_uri(:post, %r|https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/|,
                              :body => "empty")
 
-      issue = Helpshift::Issue.new
-      issue.email = "testuser@test.com"
-      issue.title = "test issue title"
-      issue.message_body = "test issue message body"
-      issue.app_id="test_app_123456-987654"
+      issue               = Helpshift::Issue.new
+      issue.email         = "testuser@test.com"
+      issue.title         = "test issue title"
+      issue.message_body  = "test issue message body"
+      issue.app_id        = "test_app_123456-987654"
       issue.platform_type = "android"
-      issue.tags = ["test_tag1", "test_tag2"]
-      issue.meta = { "meta-data" => "bla" }
+      issue.tags          = ["test_tag1", "test_tag2"]
+      issue.meta          = { "meta-data" => "bla" }
 
       issue.create
 
       last_request = FakeWeb.last_request
 
-      expected_body = CGI::parse("email=testuser%40test.com&title=test%20issue%20title&" +
-                   "message-body=test%20issue%20message%20body&app-id=test_app_123456-987654&"+
-                   "platform-type=android&tags=%5B%22test_tag1%22%2C%22test_tag2%22%5D&"+
-                   "meta=%7B%22meta-data%22%3A%22bla%22%7D")
-      actual_body = CGI::parse(last_request.body)
+      request_body = CGI::parse(last_request.body)
 
-      expected_body.each do |key, value|
-        assert_equal expected_body[key], actual_body[key]
+      request_body.each do |key, value|
+        unless key == "message-body"
+          issue_value = issue.send(key.gsub '-', '_')
+          request_value = value[0]
+          if(issue_value.kind_of? Array)
+            request_value = JSON.parse(request_value)
+            assert (issue_value - request_value).empty?, "Failed for #{key}"
+          elsif (issue_value.kind_of? Hash)
+            request_value = JSON.parse(request_value)
+            request_value.each do |field_key, field_value|
+              assert_equal field_value, issue_value[field_key], "Failed for #{key}"
+            end
+          else
+            assert_equal request_value, issue_value, "Failed for #{key}"
+          end
+        end
       end
 
       assert_equal "POST", last_request.method
