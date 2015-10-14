@@ -27,9 +27,9 @@ class AppTest < Minitest::Test
       assert_equal 2, apps_array.size
 
       fake_response.zip(apps_array).each do |expected_item,actual_item|
-        assert actual_item.instance_of? Helpshift::App
+        assert actual_item.instance_of?(Helpshift::App), "Failed for #{expected_item}"
         expected_item.each do |k, v|
-          assert_equal v, actual_item.send(k)
+          assert_equal v, actual_item.send(k), "Failed for #{k}"
         end
       end
     end
@@ -49,7 +49,7 @@ class AppTest < Minitest::Test
       found_app = Helpshift::App.find(app_publish_id)
 
       fake_response_object.each do |k, v|
-        assert_equal v, found_app.send(k)
+        assert_equal v, found_app.send(k), "Failed for #{k}"
       end
       assert found_app.instance_of? Helpshift::App
     end
