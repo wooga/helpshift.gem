@@ -29,7 +29,7 @@ class Issue < Minitest::Test
       issue.create
 
       last_request = FakeWeb.last_request
-
+      
       # Parse request_body to Hash and unwrap the contained values
       request_body = Hash[CGI::parse(last_request.body).map {|k,v| [k,v.first]}]
 
@@ -39,10 +39,9 @@ class Issue < Minitest::Test
                               "platform-type" => "platform_type"}
         issue_value = issue.send(cgi_param_to_attr[key] || key)
         request_value = value
-        if(issue_value.is_a?(Array))
-          request_value = JSON.parse(request_value)
-          assert((issue_value - request_value).empty?, "Failed for #{key}")
-        elsif(issue_value.is_a?(Hash))
+        if issue_value.is_a?(Array)
+          assert((issue_value - JSON.parse(request_value)).empty?, "Failed for #{key}")
+        elsif issue_value.is_a?(Hash)
           request_value = JSON.parse(request_value)
           request_value.each do |field_key, field_value|
             assert_equal field_value, issue_value[field_key], "Failed for #{key}"
