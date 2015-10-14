@@ -30,11 +30,14 @@ class Issue < Minitest::Test
 
       last_request = FakeWeb.last_request
 
-      # Parse request_body to Habh and unwrap the contained values
-      request_body = Hash[CGI::parse(last_request.body).map {|k,v| [k.gsub('-', '_'),v.first]}]
+      # Parse request_body to Hash and unwrap the contained values
+      request_body = Hash[CGI::parse(last_request.body).map {|k,v| [k,v.first]}]
 
       request_body.each do |key, value|
-        issue_value = issue.send(key.gsub('-', '_'))
+        cgi_param_to_attr = { "message-body" => "message_body",
+                              "app-id" => "app_id",
+                              "platform-type" => "platform_type"}
+        issue_value = issue.send(cgi_param_to_attr[key] || key)
         request_value = value
         if(issue_value.kind_of?(Array))
           request_value = JSON.parse(request_value)
