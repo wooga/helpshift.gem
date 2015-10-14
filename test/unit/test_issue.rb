@@ -37,9 +37,8 @@ class Issue < Minitest::Test
       # Parse request_body to Hash and unwrap the contained values
       request_data = Hash[CGI.parse(last_request.body).map {|k,v| [k,v.first]}]
 
-      request_data.each do |key, value|
+      request_data.each do |key, request_value|
         issue_attr_value = issue.send(CGI_PARAM_TO_ATTR_NAME[key] || key)
-        request_value = value
         if issue_attr_value.is_a?(Array)
           assert((issue_attr_value - JSON.parse(request_value)).empty?, "Failed for #{key}")
         elsif issue_attr_value.is_a?(Hash)
