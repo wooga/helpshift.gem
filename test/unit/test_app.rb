@@ -19,7 +19,9 @@ class AppTest < Minitest::Test
                        "publish_id" => 42,
                        "title" => "Blabla Game 2"}]
 
-      FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/apps/",
+      FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
+                                 "#{Helpshift.configuration.base_domain}/v1/"+
+                                 "#{Helpshift.configuration.customer_domain}/apps/",
                            :body => fake_response.to_json )
 
       apps_array = Helpshift::App.all
@@ -43,7 +45,10 @@ class AppTest < Minitest::Test
                                :id => "moew_app_123456789-987654321",
                                :publish_id => app_publish_id }
 
-      FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api.#{Helpshift.configuration.base_domain}/v1/#{Helpshift.configuration.customer_domain}/apps/#{app_publish_id}",
+      FakeWeb.register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
+                                 "#{Helpshift.configuration.base_domain}/v1/"+
+                                 "#{Helpshift.configuration.customer_domain}/apps/"+
+                                 "#{app_publish_id}",
                            :body => fake_response_object.to_json )
 
       found_app = Helpshift::App.find(app_publish_id)
