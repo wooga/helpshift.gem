@@ -3,9 +3,9 @@ require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
 class AppTest < Minitest::Test
   def setup
     Helpshift.configure do |config|
-      config.api_key = "foobaz"
+      config.api_key         = "foobaz"
       config.customer_domain = "foobar"
-      config.base_domain = "helpshift.com"
+      config.base_domain     = "helpshift.com"
     end
     FakeWeb.allow_net_connect = false
   end
@@ -51,7 +51,7 @@ class AppTest < Minitest::Test
       fake_response_object.each do |k, v|
         assert_equal v, found_app.send(k), "Failed for #{k}"
       end
-      assert found_app.instance_of? Helpshift::App
+      assert found_app.instance_of?(Helpshift::App)
     end
   end
 end
