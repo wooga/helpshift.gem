@@ -26,7 +26,7 @@ class AppTest < Minitest::Test
 
       assert_equal 2, apps_array.size
 
-      fake_response.zip(apps_array).each do |expected_item,actual_item|
+      fake_response.zip(apps_array).each do |expected_item, actual_item|
         assert actual_item.instance_of?(Helpshift::App), "Failed for #{expected_item}"
         expected_item.each do |k, v|
           assert_equal v, actual_item.send(k), "Failed for #{k}"
@@ -37,8 +37,8 @@ class AppTest < Minitest::Test
     should 'fetch one specific app by id' do
       app_publish_id = 1337
       fake_response_object = { :platform_ids => ["bla_platform_987654321-123456789"],
-                               :updated_at => 1000000000000,
-                               :created_at => 2000000000000,
+                               :updated_at => Time.now.to_i,
+                               :created_at => (Time.now - (3600 * 24)).to_i,
                                :title => "Game Name",
                                :id => "moew_app_123456789-987654321",
                                :publish_id => app_publish_id }
