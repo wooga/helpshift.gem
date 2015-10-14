@@ -1,4 +1,4 @@
-require File.dirname(File.expand_path(__FILE__)) + '/../test_helper.rb'
+require_relative '../test_helper.rb'
 
 class AppTest < Minitest::Test
   def setup
