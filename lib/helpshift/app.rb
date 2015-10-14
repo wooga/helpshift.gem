@@ -32,12 +32,9 @@ module Helpshift
     end
 
     def initialize(json_object)
-      @platform_ids = json_object["platform_ids"]
-      @updated_at   = json_object["updated_at"]
-      @created_at   = json_object["created_at"]
-      @title        = json_object["title"]
-      @id           = json_object["id"]
-      @publish_id   = json_object["publish_id"]
+      json_object.each do |k, v|
+        send("#{k}=", v)
+      end
     end
   end
 end
