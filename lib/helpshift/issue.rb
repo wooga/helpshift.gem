@@ -5,7 +5,7 @@ module Helpshift
 
     def create
       if !is_valid?
-        raise "Invalid issue. Are you missing field declarations for "+
+        raise "Invalid issue. Are you missing field declarations for " +
           "email, title or message_body? Is tags an Array? Is meta a Hash?"
       else
         request_uri = "https://api.#{Helpshift.configuration.base_domain}/"+
@@ -21,14 +21,14 @@ module Helpshift
           "meta"          => meta.to_json
         }
 
-        params.each {|k,v| params.delete(k) if v.nil? }
+        params.each { |name,value| params.delete(name) if value.nil? }
 
         RestClient::Request.
-          execute(method: :post,
-                  url: request_uri,
-                  payload: params,
-                  user: Helpshift.configuration.api_key,
-                  ssl_version: :SSLv23)
+          execute(:method      => :post,
+                  :url         => request_uri,
+                  :payload     => params,
+                  :user        => Helpshift.configuration.api_key,
+                  :ssl_version => :SSLv23)
       end
     end
 
