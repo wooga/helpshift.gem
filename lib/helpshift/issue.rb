@@ -6,7 +6,8 @@ module Helpshift
     def create
       if !is_valid?
         raise "Invalid issue. Are you missing field declarations for " +
-          "email, title or message_body? Is tags an Array? Is meta a Hash?"
+          "email, title, message_body, app_id or platform_type('ios', 'android' or 'web')? " +
+          "Is tags an Array? Is meta a Hash?"
       else
         request_uri = "https://api.#{Helpshift.configuration.base_domain}/"+
           "v1/#{Helpshift.configuration.customer_domain}/issues"
