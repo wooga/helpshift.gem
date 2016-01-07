@@ -22,7 +22,9 @@ module Helpshift
     end
 
     def initialize(json_object)
-      json_object.each { |key, val| send("#{key}=", val) }
+      json_object.each do |key, val|
+        send("#{key}=", val) if respond_to?("#{key}=".to_sym)
+      end
     end
 
     private

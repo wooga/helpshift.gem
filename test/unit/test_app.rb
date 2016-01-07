@@ -57,5 +57,34 @@ class AppTest < Minitest::Test
       end
       assert found_app.instance_of?(Helpshift::App)
     end
+
+    should 'ignore unknown attributes' do
+      app_publish_id = 1337
+
+      fake_response_object = {
+        :platform_ids => ["bla_platform_987654321-123456789"],
+        :updated_at   => Time.now.to_i,
+        :created_at   => (Time.now - (3600 * 24)).to_i,
+        :title        => "Game Name",
+        :id           => "moew_app_123456789-987654321",
+        :publish_id   => app_publish_id,
+        :new_attribute => :value,
+      }
+
+      FakeWeb.
+        register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
+                     "#{Helpshift.configuration.base_domain}/v1/"+
+                     "#{Helpshift.configuration.customer_domain}/apps/"+
+                     "#{app_publish_id}",
+                     :body => fake_response_object.to_json )
+
+     found_app = Helpshift::App.find(app_publish_id)
+
+     fake_response_object.each do |key, value|
+       if key != :new_attribute
+         assert_equal value, found_app.send(key), "Failed for #{key}"
+       end
+     end
+    end
   end
 end
