@@ -9,5 +9,5 @@ group :development do
   gem 'jeweler'
   gem 'shoulda'
   gem 'rr'
-  gem 'fakeweb'
+  gem 'webmock'
 end

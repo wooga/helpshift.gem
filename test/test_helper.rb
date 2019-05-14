@@ -7,7 +7,8 @@ require 'minitest/unit'
 require 'shoulda'
 require 'shoulda/context'
 require 'rr'
-require 'fakeweb'
+require 'webmock/minitest'
+
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -26,6 +27,5 @@ class Minitest::Test
       config.customer_domain = "foobar"
       config.base_domain     = 'helpshift.com'
     end
-    FakeWeb.allow_net_connect = false
   end
 end

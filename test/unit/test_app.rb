@@ -12,11 +12,11 @@ class AppTest < Minitest::Test
                        "publish_id"    => 42,
                        "title"         => "Blabla Game 2"}]
 
-      FakeWeb.
-        register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
+        stub_request(:get,
+                     "https://api."+
                      "#{Helpshift.configuration.base_domain}/v1/"+
-                     "#{Helpshift.configuration.customer_domain}/apps/",
-                     :body => fake_response.to_json )
+                     "#{Helpshift.configuration.customer_domain}/apps/").to_return(
+                       :body => fake_response.to_json)
 
       apps_array = Helpshift::App.all
 
@@ -43,11 +43,10 @@ class AppTest < Minitest::Test
         :publish_id   => app_publish_id
       }
 
-      FakeWeb.
-        register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
-                     "#{Helpshift.configuration.base_domain}/v1/"+
-                     "#{Helpshift.configuration.customer_domain}/apps/"+
-                     "#{app_publish_id}",
+      stub_request(:get, "https://api."+
+                   "#{Helpshift.configuration.base_domain}/v1/"+
+                   "#{Helpshift.configuration.customer_domain}/apps/"+
+                   "#{app_publish_id}").to_return(
                      :body => fake_response_object.to_json )
 
       found_app = Helpshift::App.find(app_publish_id)
@@ -71,11 +70,10 @@ class AppTest < Minitest::Test
         :new_attribute => :value,
       }
 
-      FakeWeb.
-        register_uri(:get, "https://#{Helpshift.configuration.api_key}@api."+
+      stub_request(:get, "https://api."+
                      "#{Helpshift.configuration.base_domain}/v1/"+
                      "#{Helpshift.configuration.customer_domain}/apps/"+
-                     "#{app_publish_id}",
+                     "#{app_publish_id}").to_return(
                      :body => fake_response_object.to_json )
 
      found_app = Helpshift::App.find(app_publish_id)
